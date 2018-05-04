@@ -20,8 +20,14 @@ We show how the magnitude of Gaussian noise affects convergence properties of \a
 \input{expintro}
 
 \paragraph{Previous work}
+
+While one-dimensional balanced graph partitioning has been studied extensively and a number of tools exist, to the best of our knowledge none of the practical algorithms for this problem have been previously based on running gradient descent on a continuous relaxation\todo{We will have to triple check this by looking at various NIPS papers}.
+Existing approaches are inherently discrete and are based on combinations of various discrete algorithms ideas with heuristics: combinatorial heuristics and greedy methods (e.g. METIS~\cite{KK95}, FENNEL~\cite{TGRV14}), branch-and-bound (e.g.~\cite{DGRW12}), label propagation and local search (e.g. balanced label propagration~\cite{UB13}, Social Hash Partitioner~\cite{KKPPSAP17}, Spinner~\cite{MLLS17}), as well as hybrid approaches (e.g. linear embedding method combined with various optimizations~\cite{ABM16}). See~\cite{BMSSS16} for a recent survey of this topic. Due to the combinatorial nature of these algorithms their generalizations to the multi-dimensional case appear to be non-straightforward without substantial losses in performance, while a continuous relaxation handles multiple balance constrains uniformly.
+
+Vast literature exists on optimization of non-convex functions and the interest in this topic lately has been particularly high~\cite{}\todo{cite all sorts of classic and recent gradient descent papers}. However, in the constrained case when the optimization has to be performed over a convex body fairly little is known for the general case (see e.g. classic texts~\cite{B99,WN99,BV04}). We refer to the convex constrained non-convex optimization problem as CNOPT, as in Section 6.6 of a recent survey on non-convex optimization for machine learning~\cite{JK17}.
+
 \begin{itemize}
-\item Discuss all papers on balanced graph partitioning again~\cite{KK95, DGRW12, UB13, TGRV14, ABM16,  DKKOPS16, MLLS17, KKPPSAP17}, survey~\cite{BMSSS16}.
+%\item Discuss all papers on balanced graph partitioning again~\cite{KK95, DGRW12, UB13, TGRV14, ABM16,  DKKOPS16, MLLS17, KKPPSAP17}, survey~\cite{BMSSS16}.
 \item Discuss all the standard non-convex optimization subject to convex constraints (CNOPT) literature again~\cite{B99} (Section 2.3),~\cite{JK17} (Section 6.6).
 \item Discuss recent papers which use first-order methods for CNOPT and show how to escape saddle points in general and specific situations. Cite noisy SGD~\cite{GHJY15}, some polynomial time algortihm which converges to third-order local optimum~\cite{AG16}, matrix completion~\cite{GLM16}, second-order methods~\cite{SQW15}.
 \item Discuss papers which use PGD for constrained non-convex optimization problems arising from graph partitioning~\cite{LRSST10}.\todo{Find more papers to cite here}.
