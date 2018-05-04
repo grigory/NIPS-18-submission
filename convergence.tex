@@ -1,0 +1,180 @@
+\section{Towards convergence analysis}\label{sec:convergence}
+%If the domain of $f$ is restricted to $[-\Delta, \Delta]^{|V|}$ then the Lipschitz constant of $f \colon [-\Delta, \Delta]^{|V|} \to \mathbb R$ is:
+%$$K = \sup_{\vx \in [-\Delta,\Delta]^{|V|}} \|\nabla f(\vx)\|_2 \le \Delta d \sqrt{|V|},$$
+%where $d$ is the maximum degree in $G$.
+
+
+
+
+\begin{lemma}[Bertsekas, Section 2.3.2]\label{lem:pgd-step}
+	If $\|\nabla f(\vx) - \nabla f(\vy)\| \le L \|\vx - \vy\|$ for all $\vx, \vy \in \mathbb R^n$ and $0 < \gamma < 2/L$ then 
+	\begin{align*}
+	f(\vx_{t + 1}) - f(\vx_t) \ge \left(\frac{1}{\gamma} - \frac{L}{2}\right)\|\vx_t - \vx_{t+1}\|_2^2
+	\end{align*}
+	
+\end{lemma}
+
+\begin{proof}
+	
+	We use the following Descent Lemma:
+	
+	\begin{proposition}[Descent Lemma]
+		Let $f \colon \mathbb R^n \to \mathbb R$ be continuously differentiable, and let $\vx$ and $\vy$ be two vectors in $\mathbb R^n$. If for all $t \in [0,1]$ it holds that $\|\nabla f(\vx + t\vy) - \nabla f(\vx)\| \le L t \|\vy\|$ where $L$ is a constant then:
+		$$f(\vx + \vy) \ge f(\vx) + \vy^T \nabla f(\vx) - \frac{L}{2} \|\vy\|_2^2$$
+	\end{proposition}
+	\begin{proof}
+		Let $t$ be a scalar and let $g(t) = f(\vx + t \vy)$. By the chain rule $(d g / dt)(t) = \vy^T \nabla f(\vx + t\vy)$.
+		Then:
+		\begin{align*}
+		f(\vx + \vy) - f(\vx) &= g(1) - g(0) \\
+		& = \int_0^1 \frac{d g}{d t}(g) dt \\
+		& = \int_0^1 \vy^T \nabla f(\vx + t \vy) dt \\
+		&\ge \int_0^1 \vy^T \nabla f(\vx) dt - \left|\int_0^1 \vy^T (\nabla f(\vx + t \vy) - \nabla f(\vx)) dt\right| \\
+		&\ge \int_0^1 \vy^T \nabla f(\vx) dt  - \int_0^1 \|\vy\|_2 \|\nabla f(\vx + t \vy) - \nabla f(\vx)\|_2dt\\
+		& \ge \vy^T \nabla f(\vx) - \|\vy\|_2 \int_0^1 L t \|\vy\|_2 dt \\
+		& = \vy^T \nabla f(\vx) - \frac{L}{2} \|\vy\|_2^2
+		\end{align*}
+	\end{proof}
+	
+	
+	By the Descent Lemma we have:
+	\begin{align*}
+	f(\vx_{t + 1}) - f(\vx_t) \ge \nabla f(\vx_t)(\vx_{t + 1} - \vx_t) - \frac{L}{2}\|\vx_{t + 1} - \vx_t\|_2^2.
+	\end{align*}
+	
+	Note that since $K = \mathcal S_0 \cap \mathcal B_\infty$ is a convex body and $\vx_{k + 1}$ is a projection of $\vy_{t + 1}$ on $K$ for every $\vx \in K$ it holds that:
+	$$(\vy_{t + 1} - \vx_{t + 1})(\vx - \vx_{t + 1}) \le 0.$$
+	Applying this to $\vx = \vx_t$ and using the fact that $\vy_{t + 1} = \vx_t + \gamma \nabla f(\vx_t)$ we have:
+	$$(\vx_t + \gamma \nabla f(\vx_t) - \vx_{t + 1})(\vx_t - \vx_{t + 1}) \le 0,$$
+	which implies that $\nabla f(\vx_t) (\vx_{t+1} - \vx_{t}) \ge \frac{1}{\gamma}\|\vx_t - \vx_{t+1}\|_2^2$. Hence we have:
+	\begin{align*}
+	f(\vx_{k + 1}) - f(\vx_k) \ge \left(\frac{1}{\gamma} - \frac{L}{2}\right)\|\vx_t - \vx_{t+1}\|_2^2
+	\end{align*}
+	
+	%\textbf{The part below I don't quite understand, I think something is missing.}
+	%Thus if $\gamma < 2/L$, the RHS of the above is nonnegative so if $\{\vx_t\}$ has a limit point the LHS tends to $0$.
+	%Therefore, $\|\vx_{t + 1} - \vx_t\| \to 0$, which implies that for every limit point $\bar \vx$ of $\{\vx_t\}$ we have $[\bar \vx + \gamma \nabla f(\bar \vx)]^+ = \bar \vx$, so $\bar \vx$ is stationary (here we use notation $[\vx]^+$ to denote the projection of a vector $\vx$ on $K$).
+\end{proof}
+
+\subsection{First step}
+
+
+Let's analyze the first step. We show the following theorem:
+\begin{theorem}
+	Let $\lambda_{max} = \max(|\lambda_1|, |\lambda_n|)$ then
+	if $\gamma = 1/\lambda_{max}$ then $\mathbb E[f(\vx_1)] \ge \frac{\eta^2 |E|}{2 \lambda_{max}}$ (assuming we don't have to round the coordinates\todo{Fix this!}).
+\end{theorem}
+
+
+Consider three points $\vx_0, \vx_1$ and $\vy_1$. These three points lie in a hyperplane $H'$ which is orthogonal to the hyperplane $H = \{\vx \colon \langle \vone, \vx \rangle = 0\}$, where $\vone = (\frac{1}{\sqrt{n}}, \dots, \frac{1}{\sqrt{n}})$.
+Let $\vx_0'$ be the projection of $\vx_0$ on $H$.
+Then $\vx_0'$ also lies in $H'$.
+
+We have $\|\vx_1 - \vx_0\|_2^2 = \|\vx_0 - \vx'_0\|_2^2 + \|\vx_0' - \vx_1\|_2^2$.
+Let $\vy_1'$ be the projection of $\vx_0$ on the line through $\vy_1$ and $\vx_1$.
+Then $\|\vx_0 - \vy_1\|_2^2 = \|\vx_0 - \vy_1'\|_2^2 + \|\vy_1' - \vy_1\|_2^2$.
+Since $\|\vx_0 - \vy_1'\|_2^2 = \|\vx_0' - \vx_1\|_2^2$ we have:
+\begin{align*}
+\|\vx_1 - \vx_0\|_2^2 = \|\vx_0 - \vx_0'\|_2^2 + \|\vx_0 - \vy_1\|_2^2 - \|\vy_1' - \vy_1\|_2^2.
+\end{align*}
+
+We now take expectations and make use of the Lemma~\ref{lem:first-pgd-step-geometry} which is proved below:
+\begin{align*}
+\mathbb E\left[\|\vx_1 - \vx_0\|_2^2\right] &= \eta^2 \left(1 + \gamma^2 \|A\|_F^2 - \gamma^2 \sum_{i = 1}^n \lambda_i^2 \langle \vone, v_i\rangle^2\right) \\
+& \ge \eta^2 (1 + 2 \gamma^2 |E| - \gamma^2 \max(\lambda_1^2, \lambda_n^2))
+\end{align*}
+
+%The following is a standard fact about eigenvalues of the adjacency matrix (see e.g. Lovasz\todo{add citation}):
+%\begin{proposition}
+%If $\bar d = \frac{1}{n} \sum_{i = 1}^n d_i$ is the average degree and $\lambda_1$ is the largest eigenvalue of the adjacency matrix then:
+%$$\max(\bar d,\sqrt{d_{max}})\le \lambda_1 \le d_{max}$$
+%\end{proposition}
+%
+%Hence:
+%\begin{align*}
+%\mathbb E\left[\|\vx_1 - \vx_0\|_2^2\right] \ge \eta^2 (1 + \gamma^2 (|E| - d_{max}^2) )
+%\end{align*}
+
+By Lemma~\ref{lem:pgd-step} using the fact that for our function $f(\vx) = \vx^T A \vx$ we have $L \le \max(|\lambda_1|, |\lambda_n|)$ we obtain:
+$$f(\vx_1) - f(\vx_0) \ge \left(\frac{1}{\gamma} - \frac{\max( |\lambda_1|, |\lambda_n|)}{2}\right) \|\vx_1 - \vx_0\|_2^2.$$
+
+Setting $\gamma = 1/ \max(|\lambda_1|, |\lambda_n|)$ and taking expectations we have:
+$$\mathbb E[f(\vx_1) - f(\vx_0)] \ge \frac{\eta^2|E|}{2 \max(|\lambda_1|, |\lambda_n|)}  $$
+
+Finally note that:
+$$\mathbb E[f(\vx_0)] = \mathbb E[\vx_0 A \vx_0] = \eta^2 \sum_{i = 1}^n \lambda_i = \eta^2 tr(A) = 0,$$
+and hence the proof of the theorem follows.
+
+It remains to prove Lemma~\ref{lem:first-pgd-step-geometry}.
+
+\begin{lemma}\label{lem:first-pgd-step-geometry}
+	If $A = \sum_{i = 1}^n \lambda_i v_i v_i^T$ is the eigendecomposition of $A$ where $v_i$'s form an orthonormal basis then:
+	\begin{align*}
+	&\mathbb E[\|\vx_0 - \vx_0'\|_2^2] = \eta^2 \\
+	&\mathbb E[\|\vx_0 - \vy_1\|_2^2 ] = \eta^2 \gamma^2 \|A\|_F^2\\
+	&\mathbb E[\|\vy_1' - \vy_1\|_2^2] = \eta^2 \gamma^2 \sum_{i = 1}^n \lambda_i^2 \langle \vone, v_i \rangle^2
+	\end{align*}
+\end{lemma}
+\begin{proof}
+	We have $\mathbb E[\|\vx_0 - \vx_0'\|_2^2] = \mathbb E[\langle \vone, \vx_0 \rangle^2]ß = \eta^2$, where the second equality follows by rotational symmetry of the Gaussian distribution. 
+	
+	%$$\mathbb E[(\sum_{i = 1}^n \frac{1}{\sqrt n} (\vx_0)_i)^2] = \frac{1}{n} \mathbb E[\sum_{i = 1}^n (\vx_0)_i^2] = \eta^2 $$
+	
+	We have: 
+	\begin{align*}
+	\mathbb E[\|\vx_0 - \vy_1\|_2^2] &= \mathbb E[\|\gamma A \vx_0\|_2^2] \\
+	&= \mathbb E\left[\gamma^2 \vx_0^T A^2 \vx_0 \right]\\
+	&= \mathbb E\left[\gamma^2 \vx_0^T \left(\sum_{i = 1}^n \lambda^2_i v_i v_i^T\right) \vx_0 \right]\\
+	&= \gamma^2 \sum_{i = 1}^n \lambda^2_i \mathbb E\left[\langle v_i, \vx_0\rangle^2\right] \\
+	&= \gamma^2 \eta^2 \|A\|_F^2,
+	\end{align*}
+	where in the last equality we use the fact that since each $v_i$ is a unit vector $\mathbb E[\langle v_i, \vx_0\rangle ] = \eta^2$ by the rotaional symmetry of the Gaussian distribution.
+	
+	Finally, we have:
+	\begin{align*}
+	\mathbb E[\|\vy_1' - \vy_1\|_2^2] &= \mathbb E[\langle \vone, \vy_1 - \vx_0 \rangle^2 ] \\
+	&= \mathbb E[\langle \vone, \gamma A \vx_0 \rangle^2] \\
+	&= \gamma^2 \mathbb E\left[\left(\vone^T \left(\sum_{i = 1}^n \lambda_i v_i v_i^T\right) \vx_0\right)^2\right] \\
+	&= \gamma^2 \mathbb E\left[ \left(\sum_{i = 1}^n \lambda_i \langle\vone, v_i\rangle \langle v_i, \vx_0\rangle \right)^2 \right] \\
+	&= \gamma^2 \left(\sum_{i = 1}^n \sum_{j = 1}^n\lambda_i \lambda_j \langle\vone, v_i\rangle \langle \vone, v_j\rangle \mathbb E\left[\langle v_i, \vx_0\rangle \langle v_j, \vx_0\rangle\right]\right)
+	\end{align*}
+	Note that since $v_i$ and $v_j$ are orthogonal for $i \neq j$ we have $\mathbb E\left[\langle v_i, \vx_0\rangle \langle v_j, \vx_0\rangle\right] = 0$. For $i = j$ we have $\mathbb E[\langle v_i, \vx_0\rangle^2] = \eta^2$ as before. Hence we have:
+	\begin{align*}
+	\mathbb E[\|\vy_1' - \vy_1\|_2^2] = \eta^2 \gamma^2 \sum_{i = 1}^n \lambda_i^2 \langle \vone, v_i \rangle^2
+	\end{align*}
+	
+	
+\end{proof}
+
+
+\subsection{$t$-th step}
+
+We will assume that noise is added in every step, i.e. the algorithm at every step looks as follows:
+\begin{enumerate}
+	\item Given input $\vx_t$ from the pervious step let $\vx_t' = \vx_t + \eta N(0,1)$.
+	\item Let $\vy_{t + 1} = \vx_t' + \gamma A \vx_t'$
+	\item Set $\vx_{t + 1} = \arg min_{\vx \in \mathcal S_0 \cap \mathcal B_\infty} \|\vy_{t + 1} - \vx\|$.
+\end{enumerate}
+
+We need an analog of Lemma~\ref{lem:first-pgd-step-geometry}.
+\begin{lemma}
+	\begin{align*}
+	\mathbb E[\|\vy_{t + 1} - \vx_{t}'\|_2^2] \ge \gamma^2 \eta^2 \|A\|_F^2.
+	\end{align*}
+\end{lemma}
+\newcommand{\vz}{\mathbf z}
+\begin{proof}
+	Let $\vz \sim N(0,1)$
+	\begin{align*}
+	\mathbb E[\|\vy_{t + 1} - \vx_{t}'\|_2^2] &= \mathbb E[\|\gamma A \vx_t'\|_2^2] \\ 
+	&= \gamma^2 \mathbb E[\vx_t'^Tß A^2 \vx_t'] \\
+	&= \gamma^2 \mathbb E[(\vx_t + \eta \vz)^T A^2 (\vx_t + \eta \vz)] \\
+	& = \gamma^2 \left(\vx_t^T A^2 \vx_tß + 2 \eta \mathbb E[\vz^T A^2 \vx_t] + \eta^2 \mathbb E[\vz^T A^2 \vz]\right)
+	\end{align*}
+	We have $\mathbb E[\mathbb \vz^T A^2 \vz] = \|A\|_F^2$ as in the proof of Lemma~\ref{lem:first-pgd-step-geometry}.
+	Furthermore, $\mathbb E[\vz^T A^2 \vx_t] = \mathbb E[\langle \vz, A^2 \vx_t\rangle] = 0$ where the second equality follows by the linearity of expectation using the fact that $\mathbb E[\vz_i] = 0$ for each $i$.
+	
+	We have $\vx_t^T A^2 \vx_t = \sum_{i = 1}^n \lambda_i^2 \langle v_i, \vx_t\rangle^2 \ge 0$ which completes the proof.
+	
+	
+\end{proof}

@@ -1,0 +1,140 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{DGRW12}
+
+\bibitem[ABM16]{ABM16}
+Kevin Aydin, MohammadHossein Bateni, and Vahab~S. Mirrokni.
+\newblock Distributed balanced partitioning via linear embedding.
+\newblock In {\em Proceedings of the Ninth {ACM} International Conference on
+  Web Search and Data Mining, San Francisco, CA, USA, February 22-25, 2016},
+  pages 387--396, 2016.
+
+\bibitem[AFK{\etalchar{+}}14]{AFKRS14}
+Amihood Amir, Jessica Ficler, Robert Krauthgamer, Liam Roditty, and Oren~Sar
+  Shalom.
+\newblock Multiply balanced k -partitioning.
+\newblock In {\em {LATIN} 2014: Theoretical Informatics - 11th Latin American
+  Symposium, Montevideo, Uruguay, March 31 - April 4, 2014. Proceedings}, pages
+  586--597, 2014.
+
+\bibitem[AG16]{AG16}
+Animashree Anandkumar and Rong Ge.
+\newblock Efficient approaches for escaping higher order saddle points in
+  non-convex optimization.
+\newblock In {\em Proceedings of the 29th Conference on Learning Theory, {COLT}
+  2016, New York, USA, June 23-26, 2016}, pages 81--102, 2016.
+
+\bibitem[Ber99]{B99}
+Dimitri~P Bertsekas.
+\newblock {\em Nonlinear programming}.
+\newblock Athena scientific Belmont, 1999.
+
+\bibitem[BMS{\etalchar{+}}16]{BMSSS16}
+Aydin Bulu{\c{c}}, Henning Meyerhenke, Ilya Safro, Peter Sanders, and Christian
+  Schulz.
+\newblock Recent advances in graph partitioning.
+\newblock In {\em Algorithm Engineering - Selected Results and Surveys}, pages
+  117--158. 2016.
+
+\bibitem[DGRW12]{DGRW12}
+Daniel Delling, Andrew~V. Goldberg, Ilya~P. Razenshteyn, and Renato Fonseca~F.
+  Werneck.
+\newblock Exact combinatorial branch-and-bound for graph bisection.
+\newblock In {\em Proceedings of the 14th Meeting on Algorithm Engineering {\&}
+  Experiments, {ALENEX} 2012, The Westin Miyako, Kyoto, Japan, January 16,
+  2012}, pages 30--44, 2012.
+
+\bibitem[DKK{\etalchar{+}}16]{DKKOPS16}
+Laxman Dhulipala, Igor Kabiljo, Brian Karrer, Giuseppe Ottaviano, Sergey
+  Pupyrev, and Alon Shalita.
+\newblock Compressing graphs and indexes with recursive graph bisection.
+\newblock In {\em Proceedings of the 22Nd ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, KDD '16, pages 1535--1544, New York,
+  NY, USA, 2016. ACM.
+
+\bibitem[GHJY15]{GHJY15}
+Rong Ge, Furong Huang, Chi Jin, and Yang Yuan.
+\newblock Escaping from saddle points - online stochastic gradient for tensor
+  decomposition.
+\newblock In {\em Proceedings of The 28th Conference on Learning Theory, {COLT}
+  2015, Paris, France, July 3-6, 2015}, pages 797--842, 2015.
+
+\bibitem[GLM16]{GLM16}
+Rong Ge, Jason~D. Lee, and Tengyu Ma.
+\newblock Matrix completion has no spurious local minimum.
+\newblock In {\em Advances in Neural Information Processing Systems 29: Annual
+  Conference on Neural Information Processing Systems 2016, December 5-10,
+  2016, Barcelona, Spain}, pages 2973--2981, 2016.
+
+\bibitem[JK17]{JK17}
+P.~{Jain} and P.~{Kar}.
+\newblock {Non-convex Optimization for Machine Learning}.
+\newblock {\em ArXiv e-prints}, December 2017.
+
+\bibitem[KK95]{KK95}
+George Karypis and Vipin Kumar.
+\newblock Metis -- unstructured graph partitioning and sparse matrix ordering
+  system, version 2.0.
+\newblock Technical report, 1995.
+
+\bibitem[KKP{\etalchar{+}}17]{KKPPSAP17}
+Igor Kabiljo, Brian Karrer, Mayank Pundir, Sergey Pupyrev, Alon Shalita,
+  Yaroslav Akhremtsev, and Alessandro Presta.
+\newblock Social hash partitioner: {A} scalable distributed hypergraph
+  partitioner.
+\newblock {\em {PVLDB}}, 10(11):1418--1429, 2017.
+
+\bibitem[KNS09]{KNS09}
+Robert Krauthgamer, Joseph Naor, and Roy Schwartz.
+\newblock Partitioning graphs into balanced components.
+\newblock In {\em Proceedings of the Twentieth Annual {ACM-SIAM} Symposium on
+  Discrete Algorithms, {SODA} 2009, New York, NY, USA, January 4-6, 2009},
+  pages 942--949, 2009.
+
+\bibitem[LRS{\etalchar{+}}10]{LRSST10}
+Jason~D. Lee, Ben Recht, Ruslan Salakhutdinov, Nathan Srebro, and Joel~A.
+  Tropp.
+\newblock Practical large-scale optimization for max-norm regularization.
+\newblock In {\em Advances in Neural Information Processing Systems 23: 24th
+  Annual Conference on Neural Information Processing Systems 2010. Proceedings
+  of a meeting held 6-9 December 2010, Vancouver, British Columbia, Canada.},
+  pages 1297--1305, 2010.
+
+\bibitem[MLLS17]{MLLS17}
+Claudio Martella, Dionysios Logothetis, Andreas Loukas, and Georgos Siganos.
+\newblock Spinner: Scalable graph partitioning in the cloud.
+\newblock In {\em 33rd {IEEE} International Conference on Data Engineering,
+  {ICDE} 2017, San Diego, CA, USA, April 19-22, 2017}, pages 1083--1094, 2017.
+
+\bibitem[MM14]{MM14}
+Konstantin Makarychev and Yury Makarychev.
+\newblock Nonuniform graph partitioning with unrelated weights.
+\newblock In {\em Automata, Languages, and Programming - 41st International
+  Colloquium, {ICALP} 2014, Copenhagen, Denmark, July 8-11, 2014, Proceedings,
+  Part {I}}, pages 812--822, 2014.
+
+\bibitem[SBG{\etalchar{+}}17]{SBGBB17}
+Bartolomeo Stellato, Goran Banjac, Paul Goulart, Alberto Bemporad, and Stephen
+  Boyd.
+\newblock Osqp: An operator splitting solver for quadratic programs.
+\newblock {\em arXiv preprint arXiv:1711.08013}, 2017.
+
+\bibitem[SQW15]{SQW15}
+Ju~Sun, Qing Qu, and John Wright.
+\newblock When are nonconvex problems not scary?
+\newblock {\em CoRR}, abs/1510.06096, 2015.
+
+\bibitem[TGRV14]{TGRV14}
+Charalampos~E. Tsourakakis, Christos Gkantsidis, Bozidar Radunovic, and Milan
+  Vojnovic.
+\newblock {FENNEL:} streaming graph partitioning for massive scale graphs.
+\newblock In {\em Seventh {ACM} International Conference on Web Search and Data
+  Mining, {WSDM} 2014, New York, NY, USA, February 24-28, 2014}, pages
+  333--342, 2014.
+
+\bibitem[UB13]{UB13}
+Johan Ugander and Lars Backstrom.
+\newblock Balanced label propagation for partitioning massive graphs.
+\newblock In {\em Sixth {ACM} International Conference on Web Search and Data
+  Mining, {WSDM} 2013, Rome, Italy, February 4-8, 2013}, pages 507--516, 2013.
+
+\end{thebibliography}

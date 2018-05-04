@@ -1,0 +1,198 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+% \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading nips_2018
+
+% ready for submission
+\usepackage{nips_2018}
+
+% to compile a preprint version, e.g., for submission to arXiv, add
+% add the [preprint] option:
+% \usepackage[preprint]{nips_2018}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+% \usepackage[final]{nips_2018}
+
+% to avoid loading the natbib package, add option nonatbib:
+% \usepackage[nonatbib]{nips_2018}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{verbatim}
+\usepackage{braket}
+\usepackage{todonotes}
+\usepackage{paralist}
+\usepackage{caption}
+
+\usepackage[pdfpagelabels,pagebackref,colorlinks,allcolors=blue]{hyperref}
+
+\newcommand{\algnamecaps}{\textsc{BadGer RamPaGe}\xspace}
+\newcommand{\algname}{\textsc{Badger Rampage}\xspace}
+\newcommand{\algnameshort}{\textsc{BR}\xspace}
+
+
+\title{Multi-Dimensional Balanced Graph Partitioning via Gradient Descent}
+
+% The \author macro works with any number of authors. There are two
+% commands used to separate the names and addresses of multiple
+% authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to
+% break the lines. Using \AND forces a line break at that point. So,
+% if LaTeX puts 3 of 4 authors names on the first line, and the last
+% on the second line, try using \AND instead of \And before the third
+% author name.
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{conj}[theorem]{Conjecture}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{open}{Open Problem}[section]
+%\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newenvironment{proofof}[1]{\begin{proof}[of {#1}]}{\end{proof}}
+
+\newcommand{\mypar}[1]{\smallskip \noindent {\bf {#1}.}}
+\newcommand{\myparq}[1]{\smallskip \noindent {\bf {#1}}}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+%\newenvironment{proof}[1][Proof]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+%\newenvironment{definition}[1][Definition]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{example}[1][Example]{\begin{trivlist}
+		\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+% \newenvironment{remark}[1][Remark]{\begin{trivlist}
+% \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\renewcommand{\qed}{\nobreak \ifvmode \relax \else
+	\ifdim\lastskip<1.5em \hskip-\lastskip
+	\hskip1.5em plus0em minus0.5em \fi \nobreak
+	\vrule height0.75em width0.5em depth0.25em\fi}
+
+\newcommand{\ie}{{\it i.e.,\ }}
+\newcommand{\eg}{{\it e.g.,\ }}
+\newcommand{\etal}{{\it et al.\,}}
+\newcommand{\through}{,\ldots,}
+\newcommand{\cala}{\mathcal A}
+\newcommand{\calb}{\mathcal B}
+\newcommand{\calgn}{{\mathcal G}_n}
+%\newcommand{\HHH}{\mathcal H}
+%\newcommand{\DDD}{\mathcal D}
+%\newcommand{\XXX}{\mathcal X}
+\newcommand{\cals}{\mathcal S}
+%\newcommand{\RRR}{\mathcal R}
+\newcommand{\eps}{\ensuremath{\varepsilon}}
+\newcommand{\z}{\mathrm{z}}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\oo}{\{+1,-1\}}
+\newcommand{\inv}{^{-1}}
+\def\E{\mathop{\mathbb{E}}\displaylimits}
+\def\poly{\mathop{\rm{poly}}\nolimits}
+\def\Lap{\mathop{\rm{Lap}}\nolimits}
+\newcommand{\Cauchy}{\operatorname{Cauchy}}
+\newcommand{\inr}{\in_{\mbox{\tiny R}}}
+\newcommand{\cP}{\mathcal P}
+
+\newcommand{\vxi}{\mathbb{\xi}}
+\newcommand{\vone}{\mathbf{1}}
+
+\newcommand{\vx}{\mathbf x}
+\newcommand{\vy}{\mathbf y}
+\newcommand{\vp}{\mathbf p}
+\newcommand{\ve}{\mathbf e}
+
+
+
+\author{
+  Dmitrii Avdiukhin\thanks{Use footnote for providing further
+    information about author (webpage, alternative
+    address)---\emph{not} for acknowledging funding agencies.} \\
+  Department of Computer Science\\
+  Indiana University\\
+  Bloomington, IN, 47405 \\
+  \texttt{davdyukh@iu.edu} \\
+  \And
+  Sergey Pupyrev\thanks{} \\
+  Facebook \\
+  Menlo Park, CA\\
+  \texttt{spupyrev@gmail.com}
+ \And
+ Grigory Yaroslavtsev \thanks{}\\
+ Department of Computer Science \\
+ Indiana University\\
+ Bloomington, IN, 47405 \\
+ \texttt{grigory@grigory.us}
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \AND
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+}
+
+\begin{document}
+% \nipsfinalcopy is no longer used
+
+\listoftodos
+
+\tableofcontents
+
+\newpage
+
+
+\maketitle
+
+\begin{abstract}
+  The abstract paragraph should be indented \nicefrac{1}{2}~inch
+  (3~picas) on both the left- and right-hand margins. Use 10~point
+  type, with a vertical spacing (leading) of 11~points.  The word
+  \textbf{Abstract} must be centered, bold, and in point size 12. Two
+  line spaces precede the abstract. The abstract must be limited to
+  one paragraph.
+\end{abstract}
+
+\input{intro}
+\input{algorithm}
+\input{projection}
+\input{convergence}
+\input{experiments}
+\input{conclusions}
+\newpage
+\appendix
+
+\bibliographystyle{alpha}
+\bibliography{nips18}
+
+\input{instructions}
+
+
+\end{document}

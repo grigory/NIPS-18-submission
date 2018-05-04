@@ -1,0 +1,187 @@
+\section{Projection step}\label{sec:projection}
+\todo{cite some paper which focus on efficincy of projection step in PGD}
+
+\subsection{Approximate projection for $d = 1$}
+
+Formally, we have the following optimization problem. Given a fixed vector $\vy \in \mathbb R^n$ and allowed imbalance $\epsilon$:
+\begin{align*}
+& \text{Minimize:} && f(\vx) = \|\vx - \vy\|_2^2&& \\ 
+& \text{Subject to:} && g_i = x_i^2 - 1 \le 0 &&\\
+&&& h_+ = \sum_{i = 1}^n x_i - \epsilon \le 0 && \\
+&&& h_- = -\sum_{i = 1}^n x_i - \epsilon \le 0 && \\
+\end{align*}
+
+By KKT:
+$$(\vy - \vx) = \sum_{i = 1}^n \mu_i x_i \ve_i + (\mu_+ - \mu_-) \sum_{i = 1}^n \ve_i.$$
+I.e. for each coordinate we have $y_i - x_i = \mu_i x_i + \mu_+ - \mu_-$ where and $\mu_i, \mu_+, \mu_- \ge 0$.
+Complementary slackness gives $\mu_i (x_i^2 -1) = 0$, i.e. for each $i$ either $|x_i| = 1$ or $\mu_i = 0$.
+Moreover, we have additional slackness constraints:
+\begin{itemize}
+	\item $\mu_+ (\sum_{i = 1}^n x_i - \epsilon) = 0$.
+	\item $\mu_- (-\sum_{i = 1}^n x_i - \epsilon) = 0$.
+\end{itemize}
+%Now we can solve this problem like exact projection, with $\lambda = \mu_+ - \mu_-$ and $\sum h_i \in [\sum y_i - \epsilon; \sum y_i + \epsilon]$.
+
+Consider $3$ cases:
+\begin{enumerate}
+	\item $\sum x_i = \epsilon$. In this case $\mu_- = 0$, and the first slackness constraint equals $y_i - x_i = \mu_i x_i + \mu_+$. Now this problem equals to exact projection, described in the previous section, with $\lambda=\mu_+$ and $\sum h_i = \sum y_i - \epsilon$.
+	\item $\sum x_i = -\epsilon$. This case is similar to the previous one with $\lambda=-\mu_-$ and $\sum h_i = \sum y_i + \epsilon$.
+	\item $\mu_+ = \mu_- = 0$. The first slackness constraint equals $y_i - x_i = \mu_i x_i$. This case is just projection on the hypercube, with restriction $\sum h_i \in (\sum y_i - \epsilon; \sum y_i + \epsilon)$.
+\end{enumerate}
+In all cases we have $y_i - x_i = \mu_i x_i + \lambda$, and possible values of $\lambda$ are disjoint.
+Since $\sum h_i$ is increasing, only one of this options can be satisfied.
+For example, if case one is satisfied, then for $\lambda < 0$ $\sum h_i(\lambda) = \sum y_i + \epsilon$.
+Since $\sum h_i(\lambda)$ is increasing, for $\sum h_i(0) \ge \sum h_i(\lambda) = \sum y_i + \epsilon$, and therefore $\sum h_i(0) \notin (\sum y_i - \epsilon; \sum y_i + \epsilon)$.
+
+Therefore, to find lambda we can use the following algorithm:
+\begin{itemize}
+	\item Try the case $\lambda = 0$. If $\sum h_i(0) \in (\sum y_i - \epsilon; \sum y_i + \epsilon)$, then return the corresponding $\vx$. Otherwise select the part for binary search:
+	\begin{itemize}
+		\item If $h(0) \ge \sum y_i + \epsilon$, search $\lambda$ in $(-\infty; 0]$ with $\sum h_i(\lambda) = \sum y_i + \epsilon$. 
+		\item If $h(0) \le \sum y_i - \epsilon$, search $\lambda$ in $[0; +\infty)$ with $\sum h_i(\lambda) = \sum y_i - \epsilon$. 
+	\end{itemize}
+\end{itemize}
+
+
+\subsection{Exact projection for $d = 2$}
+\todo{change this to support approximate projection}
+If we want to project on the intersection of two hyperplanes: $\sum_i w_i x_i = 0$ and $\sum_i w'_i x_i = 0$ then we can do this as follows. 
+Using parameters $\lambda$ and $\lambda'$ as above we can still use the following algorithm setting $\gamma_i = \lambda w_i + \lambda' w'_i$:
+\begin{enumerate}
+	\item $(y_i \ge 1 + \gamma_i)$. Set $x_i = 1$.
+	\item $(y_i \in (-1 + \gamma_i, 1 + \gamma_i))$. Set $x_i = y_i - \gamma_i$.
+	\item $(y_i \le -1 + \gamma_i)$. Set $x_i = -1$.
+\end{enumerate}
+
+Now we have two balance functions: $h = \sum w_i x_i$ and $h' = \sum w'_i x_i$.
+The change in $h$ after projection is expressed as:
+\begin{align*}
+\sum_i w_i y_i - \sum_i w_i x_i = &\sum_{i \colon y_i \ge 1 + \gamma_i} w_i (y_i - 1)
++ \sum_{i \colon y_i \in (-1+\gamma_i, 1+\gamma_i)} w_i \gamma_i
++ \sum_{i \colon y_i \le 1 - \gamma_i} w_i (1 + y_i) = \sum_{i} h_i(\lambda, \lambda'),
+\end{align*}
+where each $h_i$ is the following function:
+\begin{align*}
+h_i(\lambda, \lambda') = \begin{cases}
+w_i (y_i - 1)  & \text{ if } \lambda w_i + \lambda' w'_i < y_i - 1 \\ 
+w_i (\lambda w_i + \lambda' w'_i) & \text{ if } \lambda w_i + \lambda' w'_i \in [y_i - 1, y_i + 1]\\
+w_i (y_i + 1) & \text{ if } \lambda w_i + \lambda' w'_i > y_i + 1 \\
+\end{cases}
+\end{align*}
+Analogously, the difference between $h'$ can be expressed as $\sum h'_i$, where
+\begin{align*}
+h'_i(\lambda, \lambda') = \begin{cases}
+w_i' (y_i - 1)  & \text{ if } \lambda w_i + \lambda' w_i' < y_i - 1 \\ 
+w_i' (\lambda w_i + \lambda' w_i')  & \text{ if } \lambda w_i + \lambda' w_i' \in [y_i - 1, y_i + 1]\\
+w_i' (y_i + 1) & \text{ if } \lambda w_i + \lambda' w_i' > y_i + 1 \\
+\end{cases}
+\end{align*}
+Denote $h(\lambda, \lambda') = \sum h_i(\lambda, \lambda')$ and $h'(\lambda, \lambda') = \sum h'_i(\lambda, \lambda')$. We want to find $\lambda$ and $\lambda'$ such that $h(\lambda, \lambda') = \sum w_i y_i$ and $h'(\lambda, \lambda') = \sum w'_i y_i$.
+We will show that we can use binary search for $\lambda$ with binary search for $\lambda'$ inside.
+\begin{theorem}
+	Consider the situation when $\lambda$ is fixed. Denote the \emph{maximum} $\lambda'$ such that $h(\lambda, \lambda') = \sum w_i y_i$ as $root(\lambda)$. The same way denote the \emph{maximum} $\lambda'$ such that $h'(\lambda, \lambda') = \sum w'_i y_i$ as $root'(\lambda)$. Then
+	\[\lim_{\lambda \to +\infty}(root(\lambda) - root'(\lambda))
+	\cdot \lim_{\lambda \to -\infty}(root(\lambda) - root'(\lambda))
+	\le 0\]
+\end{theorem}
+Our goal is to find $\lambda$ such that $root(\lambda) - root'(\lambda) = 0$, meaning that there exist $\lambda'$, such that $h(\lambda, \lambda') = \sum w_i y_i$ and $h'(\lambda, \lambda') = \sum w'_i y_i$.
+Since function $dif (\lambda) = root(\lambda) - root'(\lambda)$ is continuous (since it's piecewise-linear and continuous near borders??) and we can find points with different signs, we can find its root using binary search. (TODO: I think I know two pointers solution for this case). 
+
+Note that there can be several $\lambda'$, corresponding to one $\lambda$. By selecting maximum value $root(\lambda)$ becomes unique. Now we will prove the theorem.
+\begin{proof}
+	For the proof we will use a geometric approach.
+	We consider a two-dimensional plane $(\lambda, \lambda')$ and the following regions: $\lambda w_i + \lambda' w_i'$ for all $i$. We will show that when $\lambda \to +\infty$, $root(\lambda)$ form a line, lying in some region and parallel to its borders.
+	
+	First, note that there are only finite number of intersections between regions. Non-empty intersections can be of two following types:
+	\begin{enumerate}
+		\item Unbounded intersections. Each region corresponds to an area between two parallel lines, two regions are \emph{parallel} if their border lines are parallel.
+		Then non-empty intersection of the regions is unbounded if all the regions are parallel.
+		\item Bounded intersection. If some of regions are not parallel, the intersection is bounded.
+	\end{enumerate}
+	We consider the case when there are no unbounded intersections of more than one region.
+	(TODO: consider another case.)
+	By monotonicity and piecewise-linearity of $h$ and $h'$ $root$ and $root'$ are also piecewise-linear functions. Since region borders are lines, for large enough $\lambda$ $root(\lambda)$ entirely lies in one region or between them (TODO: show this).
+	
+	Consider function $h$. Sort all regions by its angle $k_i = - \frac {w_i'} {w_i}$.
+	Change numeration of coordinates $\set{h_i}$ in such way that $k_i$ are decreasing.
+	Then the following is true. When point $(\lambda, \lambda')$ belongs to $i$-th region, for large enough $\lambda$:
+	\begin{itemize}
+		\item For all $h_j$ where $j < i$ the third case is satisfied (since $(\lambda, \lambda')$ is above this region), namely $\lambda w_i + \lambda' w'_i > y_i + 1$ and $h_i(\lambda, \lambda') = w_i (y_i + 1)$.
+		\item For all $h_j$ where $j > i$ the first case is satisfied (since $(\lambda, \lambda')$ is below this region), namely $\lambda w_i + \lambda' w'_i < y_i - 1$ and $h_i(\lambda, \lambda') = w_i (y_i - 1)$.
+		\item For $i$-th region itself we know that $\lambda w_i + \lambda' w'_i \in [y_i - 1; y_i + 1]$. Therefore, $\lambda w_i + \lambda' w'_i = y_i + c$, where $c \in [-1; 1]$.
+		$h_i(\lambda, \lambda') = w_i (y_i + c)$
+	\end{itemize}
+	Computing $h(\lambda, \lambda')$ gives us
+	\[h(\lambda, \lambda') = \sum\limits_{j < i} w_i (y_i + 1) + w_i (y_i + c) + \sum\limits_{j > i} w_i (y_i - 1) =\]
+	\[= \sum\limits_i w_i y_i + \sum\limits_{j < i} w_i + w_i c - \sum\limits_{j > i} w_i\]
+	In case when $(\lambda, \lambda')$ lies between $(i-1)$-th and $i$-th regions, there is no $w_i c$ term and 
+	\[h(\lambda, \lambda') = \sum\limits_i w_i y_i + \sum\limits_{j < i} w_i - \sum\limits_{j \ge i} w_i\]
+	So, the value of $h$ doesn't change between two regions, which also follows from $h_i$ definition (it is constant on each side of $i$-th region). Also note that it matches the value of $h$ on the borders of $(i-1)$-th and $i$-th region, because values of $c$ are $1$ and $-1$ respectively.
+	
+	Now we can find $root(\lambda)$ when $\lambda \to \infty$. We need to find $i$ and $c$ such that
+	\[\sum\limits_i w_i y_i = h(\lambda, \lambda') = \sum\limits_i w_i y_i + \sum\limits_{j < i} w_i + w_i c - \sum\limits_{j > i} w_i \iff \sum\limits_{j < i} w_i + w_i c - \sum\limits_{j > i} w_i = 0\]
+	Note that since all $w_i$ are non-negative, there is an only way to split such sum, but there can be two representations when $c \in \set{-1; 1}$ (i.e. when $(\lambda, \lambda')$ is between regions).
+	In such case the maximum value of $\lambda'$ is achieved when $c = -1$ (note that the maximum value is achieved on the left border of the right region, which has greater index).
+	Denote such $i$ and $c$ as $i_+$ and $c_+$ respectively.
+	(TODO: handle the case when $(\lambda, \lambda')$ is not between regions, but on the left or on the right of all of them.)
+	(TODO: handle the case when some regions are horizontal or vertical.)
+	(TODO: draw some pictures.)
+	
+	Consider $root(\lambda)$ when $\lambda \to -\infty$. By the similar reasoning we achieve the following equation for $i$ and $c$:
+	\[-\sum\limits_{j < i} w_i + w_i c + \sum\limits_{j > i} w_i = 0
+	\iff \sum\limits_{j < i} w_i - w_i c - \sum\limits_{j > i} w_i = 0 \]
+	As can be seen, $i=i_+$ and $c=-c_+$ satisfy this equation.
+	If $c_+ \in (-1; 1)$ then pair $(i_-, c_-) = (i_+, -c_+)$ is a solution, corresponding to the unique $\lambda'$.
+	Otherwise $c_+=-1 \iff -c_+=1$ and we should assign $i_- = i-1$ and $c_-=-1$ (note that the maximum value is achieved on the left border of the right region, which has smaller index).
+	
+	By the same reasoning for $h'$ we have to solve the following equations
+	\[
+	\begin{aligned}
+	\sum\limits_{j < i} w_i + w_i c - \sum\limits_{j > i} w_i = 0 \\
+	-\sum\limits_{j < i} w_i + w_i c + \sum\limits_{j > i} w_i = 0
+	\end{aligned}
+	\]
+	Denote the solution of the first equation as $(i'_+, c'_+)$.
+	Then the solution of the second equation is
+	\[
+	(i'_-, c'_-)
+	\begin{cases}
+	(i'_+, -c'_+)  & \text{ if } c'_+ \in (-1; 1) \\
+	(i'_+-1, -1)   & \text{ if } c'_+ = -1
+	\end{cases}
+	\]
+	If $i_+ = i'_+$ and $c_+ = c'_+)$ then the theorem is proved, since $\lim_{\lambda \to +\infty}(root(\lambda) - root'(\lambda)) = 0$.
+	Otherwise, w.l.o.g. assume that $i_+ < i'_+$ or ($i_+ = i'_+$ and $c_+ < c'_+)$).
+	In this case $\lim_{\lambda \to +\infty}(root(\lambda) - root'(\lambda)) < 0$, since less pair $(i,c)$ corresponds to less $\lambda'$ when $\lambda \to \infty$.
+	
+	Our goal is to show that $\lim_{\lambda \to -\infty}(root(\lambda) - root'(\lambda)) \ge 0$, and namely that $i_- < i'_-$ or ($i_- = i'_-$ and $c_- \ge c'_-$).
+	We need to consider the following cases:
+	\begin{itemize}
+		\item $i_+ < i'_+$ and $c'_+ = -1$. Then $i'_- = i'_+-1 \ge i_-$ and $c'_- = -1 \le c_-$.
+		\item $i_+ < i'_+$ and $c'_+ \in (-1; 1)$. Then $i'_- = i'_+ > i_-$.
+		\item $i_+ = i'_+$ and $c'_+ = -1$. Impossible, since $c_+$ must be less than $c'_+$.
+		\item $i_+ = i'_+$, $c_+ = -1$ and $c'_+ \in (-1; 1)$. Then $i'_- = i'_+ > i_+-1 = i_-$.
+		\item $i_+ = i'_+$, $c_+, c'_+ \in (-1; 1)$. Then $i'_- = i_-$ and $c'_- < c_-$.
+	\end{itemize}
+\end{proof}
+\begin{comment}
+The intuition is that we might be able to use double binary search (outer search on $\lambda'$, inner search on $\lambda$). In the outer search we fix $\lambda'$ and do binary search on $\lambda$ for both functions $h$ and $h'$. We would like both $h$ and $h'$ to take zero value at the same point $\lambda_*$ when $\lambda'$ is fixed.
+If this doesn't happen then we will find two values $\lambda_*$ and $\lambda'_*$ for $h$ and $h'$ respectively. Depending on whether $\lambda_* > \lambda'_*$ or $\lambda_* < \lambda'_*$ we can reduce the search space in our outer binary search for $\lambda'$.
+The tricky part is to show that this reduction is indeed correct.
+In order to do this it suffices to show that when $\lambda' \to \pm \infty$ we have $\lambda_* > \lambda'_*$ and $\lambda_* < \lambda'_*$ respectively. Then by continuity our outer binary search will find a point where $\lambda_* = \lambda'_*$.
+
+Let's assume for a moment that $n = 1$ so we just need to balance two functions $h(\lambda, \lambda')$ and $h'(\lambda, \lambda')$.
+We have:
+\begin{align*}
+h(\lambda, \lambda') = \begin{cases}
+w (1 - y)  & \text{ if } \lambda w + \lambda' w' < y - 1 \\ 
+- (\lambda w + \lambda' w') w & \text{ if } \lambda w + \lambda' w' \in [y - 1, y + 1]\\
+- w (1 + y) & \text{ if } \lambda w + \lambda' w' > y + 1 \\
+\end{cases}\\
+h'(\lambda, \lambda') = \begin{cases}
+w' (1 - y)  & \text{ if } \lambda w + \lambda' w' < y - 1 \\ 
+- (\lambda w + \lambda' w') w' & \text{ if } \lambda w + \lambda' w' \in [y - 1, y + 1]\\
+- w' (1 + y) & \text{ if } \lambda w + \lambda' w' > y + 1 \\
+\end{cases}
+\end{align*}
+\end{comment}

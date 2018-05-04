@@ -1,0 +1,43 @@
+\section{\algname: Randomized Projected Gradient Descent Algorithm}\label{sec:algorithm}
+
+The standard integer quadratic program for the weighted balanced graph $2$-partitioning problem is:
+\begin{align*}
+&\text{Maximize:  }  && \frac12  \sum_{(i, j) \in E} (x_i x_j + 1) && \\
+&\text{Subject to:} && \left|\sum_{j = 1}^n w_i(j) x_j\right| \le \epsilon \sum_{j = 1}^n w_i(j)  && \forall i \in [d]\\
+&&& x_i \in \{-1,1\} && \forall i \in V
+\end{align*}
+
+Dropping the additive term in the objective and relaxing the integrality constraints we have a relaxation:
+\begin{align*}
+&\text{Maximize:}  && \vx^T A \vx && \\
+&\text{Subject to:} && \left|\sum_{j = 1}^n w_i(j) x_j\right| \le \epsilon \sum_{j = 1}^n w_i(j)  && \forall i \in [d]\\
+&&& x_i \in [-1,1] && \forall i \in V
+\end{align*}
+
+Denoting $f(\vx) = \vx^T A \vx$ we have the gradient $\nabla f(\vx) = A \vx$ and Hessian $H_f = A$.
+%Denoting the objective as $f(\vx) = \sum_{(i,j)\in E} x_i x_j$ and taking derivatives we have:
+%\begin{align*}
+%\nabla f(\vx)_i &= \sum_{(i,j) \in E} x_j \\
+%(H_f)_{i,j} &= A_{ij}
+%\end{align*}
+
+\todo{cite Recht et al. NIPS'11 paper suggested by Kostya }
+We propose the following general algorithm for the multi-dimensional weighted balanced graph partitioning problem.
+Let $\mathcal B_\infty = \{\vx \in \mathbb R^n | \forall i \colon \vx_i \in [-1,1]\}$.
+For $i \in [d]$ let $\mathcal S^i_\epsilon = \{\vx \in \mathbb R^n  | |\sum_{j = 1}^n w_i(j) \vx_j | \le \epsilon \sum_{j = 1}^n w_i(j)\}$.
+
+\begin{algorithm}[H]\label{alg:mdgp-rpgd}
+	\SetKwInOut{Input}{input}
+	\SetKwInOut{Output}{output}
+	\SetKwRepeat{Do}{do}{while}
+	\Input{Graph $G(V,E)$, integer $k$, real value $\epsilon \in [0,1]$, weight functions $w_1, \dots, w_d \colon V \to \mathbb R^+$}
+	\Output{$(1\pm \epsilon)$-balanced partition w.r.t $w_1, \dots, w_d$ of $V$ into $(V_1, V_2)$.}
+	\caption{\algname ($d$-Dimensional Balanced Graph $2$-Partitioning via Randomized Projected Gradient Descent)}\label{alg:main}
+	$\vx_0 = 0, t = 0$ \\	
+	\Do{$\|\vx_t - \vx_{t + 1}\|_2 > \theta$}{
+		$\vx'_{t} = \vx_t + \eta_t N(0,1)$\\
+		$\vy_{t + 1} = (I + \gamma_t A) \vx'_t $\\
+		$\vx_{t + 1} = \argmin_{\vx \in K} \|\vy_{t + 1} - \vx\|_2,$ where $K = \mathcal B_\infty \bigcap_{j = 1}^d \mathcal S^j_\epsilon$\\
+		$t = t + 1$ \\ 
+	} 
+\end{algorithm}

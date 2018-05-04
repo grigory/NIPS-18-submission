@@ -1,0 +1,30 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Preliminaries}{}% 2
+\BOOKMARK [1][-]{section.3}{Badger Rampage: Randomized Projected Gradient Descent Algorithm}{}% 3
+\BOOKMARK [1][-]{section.4}{Projection step}{}% 4
+\BOOKMARK [2][-]{subsection.4.1}{Approximate projection for d = 1}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{Exact projection for d = 2}{section.4}% 6
+\BOOKMARK [1][-]{section.5}{Towards convergence analysis}{}% 7
+\BOOKMARK [2][-]{subsection.5.1}{First step}{section.5}% 8
+\BOOKMARK [2][-]{subsection.5.2}{t-th step}{section.5}% 9
+\BOOKMARK [1][-]{section.6}{Experiments}{}% 10
+\BOOKMARK [2][-]{subsection.6.1}{One-dimensional partitioning}{section.6}% 11
+\BOOKMARK [2][-]{subsection.6.2}{Multi-dimensional partitioning}{section.6}% 12
+\BOOKMARK [2][-]{subsection.6.3}{Experiments with projections}{section.6}% 13
+\BOOKMARK [2][-]{subsection.6.4}{Scalability+Distributed computation}{section.6}% 14
+\BOOKMARK [1][-]{section.7}{Conclusions}{}% 15
+\BOOKMARK [1][-]{appendix.A}{Submission of papers to NIPS 2018}{}% 16
+\BOOKMARK [2][-]{subsection.A.1}{Style}{appendix.A}% 17
+\BOOKMARK [2][-]{subsection.A.2}{Retrieval of style files}{appendix.A}% 18
+\BOOKMARK [1][-]{appendix.B}{General formatting instructions}{}% 19
+\BOOKMARK [1][-]{appendix.C}{Headings: first level}{}% 20
+\BOOKMARK [2][-]{subsection.C.1}{Headings: second level}{appendix.C}% 21
+\BOOKMARK [3][-]{subsubsection.C.1.1}{Headings: third level}{subsection.C.1}% 22
+\BOOKMARK [1][-]{appendix.D}{Citations, figures, tables, references}{}% 23
+\BOOKMARK [2][-]{subsection.D.1}{Citations within the text}{appendix.D}% 24
+\BOOKMARK [2][-]{subsection.D.2}{Footnotes}{appendix.D}% 25
+\BOOKMARK [2][-]{subsection.D.3}{Figures}{appendix.D}% 26
+\BOOKMARK [2][-]{subsection.D.4}{Tables}{appendix.D}% 27
+\BOOKMARK [1][-]{appendix.E}{Final instructions}{}% 28
+\BOOKMARK [1][-]{appendix.F}{Preparing PDF files}{}% 29
+\BOOKMARK [2][-]{subsection.F.1}{Margins in LaTeX}{appendix.F}% 30
